@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Ares Odyssey | Portal do Explorador</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#670009",
+                      "inverse-primary": "#9b4426",
+                      "secondary-container": "#00eefc",
+                      "surface-container": "#201f21",
+                      "tertiary": "#ffb3ad",
+                      "surface-dim": "#131315",
+                      "error": "#ffb4ab",
+                      "tertiary-container": "#f56c64",
+                      "surface-variant": "#353437",
+                      "inverse-on-surface": "#313032",
+                      "on-tertiary-fixed": "#410003",
+                      "on-secondary-container": "#00686f",
+                      "secondary-fixed-dim": "#00dbe9",
+                      "on-surface-variant": "#dcc1b9",
+                      "tertiary-fixed-dim": "#ffb3ad",
+                      "error-container": "#93000a",
+                      "inverse-surface": "#e5e1e4",
+                      "on-surface": "#e5e1e4",
+                      "on-primary-fixed-variant": "#7c2e11",
+                      "outline-variant": "#55423d",
+                      "surface-container-lowest": "#0e0e10",
+                      "surface-container-low": "#1c1b1d",
+                      "on-secondary": "#00363a",
+                      "on-tertiary": "#680109",
+                      "secondary": "#d3fbff",
+                      "primary-fixed": "#ffdbd0",
+                      "surface-tint": "#ffb59d",
+                      "on-background": "#e5e1e4",
+                      "outline": "#a38c84",
+                      "on-primary": "#5d1800",
+                      "surface": "#131315",
+                      "on-primary-fixed": "#390c00",
+                      "on-tertiary-fixed-variant": "#891c1d",
+                      "surface-container-high": "#2a2a2c",
+                      "surface-bright": "#39393b",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-highest": "#353437",
+                      "on-secondary-fixed": "#002022",
+                      "primary-fixed-dim": "#ffb59d",
+                      "on-secondary-fixed-variant": "#004f54",
+                      "tertiary-fixed": "#ffdad6",
+                      "primary": "#ffb59d",
+                      "on-primary-container": "#5c1800",
+                      "secondary-fixed": "#7df4ff",
+                      "on-error": "#690005",
+                      "background": "#131315",
+                      "primary-container": "#e27b58"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-sm": "12px",
+                      "margin-mobile": "16px",
+                      "stack-lg": "48px",
+                      "margin-desktop": "48px",
+                      "container-max": "1280px",
+                      "stack-md": "24px",
+                      "base": "8px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Plus Jakarta Sans"],
+                      "body-md": ["Plus Jakarta Sans"],
+                      "interactive-ui": ["Space Grotesk"],
+                      "headline-lg-mobile": ["Sora"],
+                      "headline-lg": ["Sora"],
+                      "headline-xl": ["Sora"],
+                      "headline-md": ["Sora"],
+                      "label-caps": ["Space Grotesk"]
+              }
+            }
+          }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top-color: rgba(255, 255, 255, 0.2);
+            border-left-color: rgba(255, 255, 255, 0.2);
+        }
+        .glow-primary {
+            box-shadow: 0 0 15px rgba(255, 181, 157, 0.3);
+        }
+        .glow-secondary {
+            box-shadow: 0 0 15px rgba(211, 251, 255, 0.3);
+        }
+        .hud-chip { border: 1px solid #d3fbff; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col selection:bg-primary/30">
+
+<!-- Toast Container -->
+<div id="toast-container" class="fixed top-20 right-6 z-50 flex flex-col gap-3 max-w-sm pointer-events-none"></div>
+
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-40 bg-white/5 backdrop-blur-[20px] border-b border-white/10 shadow-[0_0_15px_rgba(255,181,157,0.1)]">
+    <div class="flex justify-between items-center px-6 py-4 max-w-container-max mx-auto w-full">
+        <a href="index.html" class="flex items-center gap-3 hover:scale-105 transition-all">
+            <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+            <span class="font-headline-md text-lg text-primary">Ares Odyssey</span>
+            <span class="hud-chip px-2.5 py-0.5 rounded-full font-label-caps text-[10px] text-secondary bg-surface-container-low/50">Portal do Explorador</span>
+        </a>
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="border border-white/20 text-on-surface hover:text-primary hover:border-primary px-4 py-2 rounded-lg text-xs font-interactive-ui transition-all flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">home</span> Ir ao Site Principal
+            </a>
+            <div id="user-nav-actions" class="hidden">
+                <button onclick="handleLogout()" class="border border-white/20 text-on-surface hover:text-error hover:border-error/40 px-3 py-1.5 rounded-lg text-xs font-interactive-ui transition-all flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">logout</span> Sair
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- SEÇÃO DE AUTENTICAÇÃO (LOGIN / REGISTRO) -->
+<div id="auth-section" class="flex-grow flex items-center justify-center p-4 relative overflow-hidden pt-24 min-h-screen">
+    <div class="absolute inset-0 bg-cover bg-center opacity-25" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_AvJbNaH2wVuzBQZB8HzU-DG9YqUmpcD0aR975x572qD-CFA3xDPcuXGAvVRq8xfzlZ67oqQOfQdi6tkiTCuamECNgTX_oOCHhBLXMkMhG1RR-IY6e6hRXMUJygKfRxvxvqaFFLjcti-yo8f3qmSNrZlmFNaxIG9R31m40BrJkg36Yae3WhNdYAlRJFquHrnmduPVSkU_NeZXmCNM0P4AJ7pqedYfk9dHEQHVAH-qMiCJcaLrkqcMVcuj2hzaNEkan-xCXQQImJ4')"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background"></div>
+
+    <div class="glass-panel p-8 rounded-2xl max-w-md w-full border border-primary/30 shadow-2xl relative z-10">
+        
+        <!-- Tab Switches: Entrar vs Criar Conta -->
+        <div class="flex border-b border-white/10 mb-6">
+            <button id="tab-btn-login" onclick="switchAuthTab('login')" class="flex-1 pb-3 text-center font-interactive-ui text-sm font-bold text-primary border-b-2 border-primary transition-all">
+                Acessar Minha Conta
+            </button>
+            <button id="tab-btn-register" onclick="switchAuthTab('register')" class="flex-1 pb-3 text-center font-interactive-ui text-sm text-on-surface-variant hover:text-on-surface transition-all">
+                Criar Conta de Explorador
+            </button>
+        </div>
+
+        <!-- Form Login -->
+        <form id="form-login" onsubmit="handleUserLogin(event)" class="space-y-4">
+            <div>
+                <label class="block font-label-caps text-xs text-on-surface-variant mb-1">E-mail Cadastrado</label>
+                <input type="email" id="login-email" required placeholder="seuemail@exemplo.com" class="w-full bg-surface-container-low border border-white/20 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-primary font-interactive-ui text-sm"/>
+            </div>
+            <div>
+                <label class="block font-label-caps text-xs text-on-surface-variant mb-1">Sua Senha</label>
+                <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-surface-container-low border border-white/20 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-primary font-interactive-ui text-sm"/>
+            </div>
+            <button type="submit" id="btn-login" class="w-full bg-primary text-on-primary font-interactive-ui py-3 rounded-lg font-bold hover:glow-primary transition-all flex items-center justify-center gap-2 mt-6 text-sm">
+                Entrar no Portal
+                <span class="material-symbols-outlined text-sm">login</span>
+            </button>
+        </form>
+
+        <!-- Form Registro -->
+        <form id="form-register" onsubmit="handleUserRegister(event)" class="space-y-4 hidden">
+            <div>
+                <label class="block font-label-caps text-xs text-on-surface-variant mb-1">Nome Completo</label>
+                <input type="text" id="reg-name" required placeholder="Ex: Lucas Skywalker" class="w-full bg-surface-container-low border border-white/20 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-primary font-interactive-ui text-sm"/>
+            </div>
+            <div>
+                <label class="block font-label-caps text-xs text-on-surface-variant mb-1">E-mail de Explorador</label>
+                <input type="email" id="reg-email" required placeholder="seuemail@exemplo.com" class="w-full bg-surface-container-low border border-white/20 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-primary font-interactive-ui text-sm"/>
+            </div>
+            <div>
+                <label class="block font-label-caps text-xs text-on-surface-variant mb-1">Criar Senha Segura</label>
+                <input type="password" id="reg-password" minlength="6" required placeholder="Mínimo 6 caracteres" class="w-full bg-surface-container-low border border-white/20 rounded-lg px-4 py-2.5 text-on-surface focus:outline-none focus:border-primary font-interactive-ui text-sm"/>
+            </div>
+            <button type="submit" id="btn-register" class="w-full bg-secondary text-on-secondary font-interactive-ui py-3 rounded-lg font-bold hover:glow-secondary transition-all flex items-center justify-center gap-2 mt-6 text-sm">
+                Criar Conta & Acessar
+                <span class="material-symbols-outlined text-sm">person_add</span>
+            </button>
+        </form>
+
+        <!-- Pesquisa Rápida por E-mail (Sem Login) -->
+        <div class="mt-8 pt-6 border-t border-white/10 text-center">
+            <p class="text-xs text-on-surface-variant mb-2">Quer apenas consultar uma reserva com seu e-mail?</p>
+            <button onclick="quickSearchByEmail()" class="text-xs text-secondary hover:underline font-interactive-ui flex items-center justify-center gap-1 mx-auto">
+                <span class="material-symbols-outlined text-xs">search</span> Consultar reserva sem fazer login
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- PAINEL DO EXPLORADOR (ÁREA LOGADA COM STATUS DAS RESERVAS) -->
+<div id="explorer-portal" class="hidden min-h-screen flex flex-col pt-20">
+    <main class="flex-grow py-8 px-6 max-w-container-max mx-auto w-full space-y-8">
+        
+        <!-- Header do Usuário -->
+        <div class="glass-panel p-6 rounded-2xl border border-secondary/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <span class="hud-chip px-3 py-1 rounded-full font-label-caps text-xs text-secondary bg-surface-container-low/50">
+                    Passaporte Orbital Ativo
+                </span>
+                <h1 id="user-welcome-name" class="font-headline-lg text-2xl text-primary mt-2">Bem-vindo, Explorador</h1>
+                <p id="user-welcome-email" class="font-body-md text-xs text-on-surface-variant">Carregando perfil...</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="bg-primary text-on-primary font-interactive-ui px-5 py-2.5 rounded-lg text-xs font-bold hover:glow-primary transition-all flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm">add_circle</span> Nova Reserva / Passeio
+                </a>
+            </div>
+        </div>
+
+        <!-- Status e Acompanhamento das Reservas -->
+        <div class="glass-panel p-6 rounded-2xl border border-white/10 space-y-6">
+            <div class="flex justify-between items-center border-b border-white/10 pb-4">
+                <div>
+                    <h3 class="font-headline-md text-xl text-on-background">Andamento das Minhas Reservas</h3>
+                    <p class="font-body-md text-xs text-on-surface-variant">Acompanhe a preparação, confirmação de voo e status da sua missão marciana.</p>
+                </div>
+                <button onclick="loadUserReservations()" class="p-2 rounded-lg bg-surface-container-low border border-white/20 hover:border-secondary text-secondary transition-all">
+                    <span class="material-symbols-outlined text-sm">refresh</span>
+                </button>
+            </div>
+
+            <!-- Lista com timeline/status visual das reservas -->
+            <div id="user-reservations-list" class="space-y-4">
+                <div class="text-center py-12 text-on-surface-variant font-interactive-ui text-sm">
+                    Buscando suas reservas...
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Firebase SDK Modular (v10) -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      projectId: "ares-odyssey-mars",
+      appId: "1:940753327226:web:594874412885b55c9297c3",
+      storageBucket: "ares-odyssey-mars.firebasestorage.app",
+      apiKey: "AIzaSyB_NPc8_mT2BVz0GCPXx8RmukUMsUloTK0",
+      authDomain: "ares-odyssey-mars.firebaseapp.com",
+      messagingSenderId: "940753327226",
+      projectNumber: "940753327226"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+
+    // Toast
+    window.showToast = function(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        const bgColor = type === 'success' ? 'bg-surface-container border-primary/50 text-primary' : 'bg-surface-container border-error/50 text-error';
+        const icon = type === 'success' ? 'check_circle' : 'error';
+        
+        toast.className = `glass-panel ${bgColor} border px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 transition-all duration-300 transform translate-x-5 opacity-0 pointer-events-auto`;
+        toast.innerHTML = `
+            <span class="material-symbols-outlined text-xl">${icon}</span>
+            <div class="font-interactive-ui text-sm text-on-surface">${message}</div>
+        `;
+        
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.remove('translate-x-5', 'opacity-0'), 10);
+        setTimeout(() => {
+            toast.classList.add('opacity-0', 'translate-x-5');
+            setTimeout(() => toast.remove(), 300);
+        }, 4000);
+    };
+
+    // Monitorar Autenticação
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('explorer-portal').classList.remove('hidden');
+            document.getElementById('user-nav-actions').classList.remove('hidden');
+
+            document.getElementById('user-welcome-name').innerText = `Bem-vindo, ${user.displayName || 'Explorador'}`;
+            document.getElementById('user-welcome-email').innerText = `E-mail Cadastrado: ${user.email}`;
+
+            window.loadUserReservations();
+        } else {
+            currentUser = null;
+            document.getElementById('auth-section').classList.remove('hidden');
+            document.getElementById('explorer-portal').classList.add('hidden');
+            document.getElementById('user-nav-actions').classList.add('hidden');
+        }
+    });
+
+    // Login
+    window.handleUserLogin = async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const pass = document.getElementById('login-password').value;
+        const btn = document.getElementById('btn-login');
+        btn.disabled = true;
+        btn.innerText = 'Entrando...';
+
+        try {
+            await signInWithEmailAndPassword(auth, email, pass);
+            window.showToast('Login efetuado com sucesso!');
+        } catch (err) {
+            console.error(err);
+            window.showToast('E-mail ou senha incorretos.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = 'Entrar no Portal <span class="material-symbols-outlined text-sm">login</span>';
+        }
+    };
+
+    // Registro
+    window.handleUserRegister = async function(e) {
+        e.preventDefault();
+        const name = document.getElementById('reg-name').value;
+        const email = document.getElementById('reg-email').value;
+        const pass = document.getElementById('reg-password').value;
+        const btn = document.getElementById('btn-register');
+        btn.disabled = true;
+        btn.innerText = 'Criando Conta...';
+
+        try {
+            const res = await createUserWithEmailAndPassword(auth, email, pass);
+            await updateProfile(res.user, { displayName: name });
+            window.showToast('Conta de explorador criada com sucesso!');
+        } catch (err) {
+            console.error(err);
+            window.showToast('Erro ao criar conta. Este e-mail pode já estar em uso.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = 'Criar Conta & Acessar <span class="material-symbols-outlined text-sm">person_add</span>';
+        }
+    };
+
+    // Logout
+    window.handleLogout = async function() {
+        await signOut(auth);
+        window.showToast('Sessão encerrada.');
+    };
+
+    // Carregar Reservas do Usuário Conectado
+    window.loadUserReservations = async function() {
+        const listDiv = document.getElementById('user-reservations-list');
+        listDiv.innerHTML = '<div class="text-center py-12 text-on-surface-variant font-interactive-ui text-sm">Buscando suas reservas...</div>';
+
+        if (!currentUser && !window.customSearchEmail) {
+            listDiv.innerHTML = '<div class="text-center py-8 text-on-surface-variant text-sm font-interactive-ui">Faça login para visualizar suas reservas.</div>';
+            return;
+        }
+
+        const emailToSearch = currentUser ? currentUser.email : window.customSearchEmail;
+
+        try {
+            const reservasSnap = await getDocs(query(collection(db, "reservas")));
+            const expedicoesSnap = await getDocs(query(collection(db, "expedicoes")));
+
+            const myItems = [];
+            reservasSnap.forEach(docSnap => {
+                const d = docSnap.data();
+                if (d.clienteEmail && d.clienteEmail.toLowerCase() === emailToSearch.toLowerCase()) {
+                    myItems.push({ id: docSnap.id, type: d.tipo || 'Hospedagem', ...d });
+                }
+            });
+
+            expedicoesSnap.forEach(docSnap => {
+                const d = docSnap.data();
+                if (d.clienteEmail && d.clienteEmail.toLowerCase() === emailToSearch.toLowerCase()) {
+                    myItems.push({ id: docSnap.id, type: 'Expedição Rover', ...d });
+                }
+            });
+
+            if (myItems.length === 0) {
+                listDiv.innerHTML = `
+                    <div class="text-center py-12 border border-dashed border-white/10 rounded-xl space-y-3">
+                        <span class="material-symbols-outlined text-4xl text-on-surface-variant">flight_takeoff</span>
+                        <p class="text-on-surface-variant text-sm font-interactive-ui">Você ainda não possui reservas gravadas para <strong>${emailToSearch}</strong>.</p>
+                        <a href="index.html" class="inline-block bg-primary text-on-primary px-6 py-2 rounded-lg text-xs font-bold hover:glow-primary transition-all">Explorar Pacotes em Marte</a>
+                    </div>
+                `;
+                return;
+            }
+
+            listDiv.innerHTML = myItems.map(item => {
+                const status = item.status || 'Confirmado';
+                let stepStatusHtml = '';
+
+                if (status === 'Voo Aprovado') {
+                    stepStatusHtml = `
+                        <div class="flex items-center gap-2 text-xs text-emerald-400 font-label-caps mt-2">
+                            <span class="material-symbols-outlined text-base">verified</span>
+                            Voo Aprovado e Credencial Orbital Confirmada!
+                        </div>
+                    `;
+                } else {
+                    stepStatusHtml = `
+                        <div class="flex items-center gap-2 text-xs text-amber-300 font-label-caps mt-2">
+                            <span class="material-symbols-outlined text-base">hourglass_top</span>
+                            Reserva Registrada • Aguardando Verificação de Voo
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="glass-panel p-5 rounded-xl border border-white/10 space-y-4 hover:border-primary/40 transition-all">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-label-caps ${item.type === 'Expedição Rover' ? 'bg-secondary/20 text-secondary border border-secondary/30' : 'bg-primary/20 text-primary border border-primary/30'}">${item.type}</span>
+                                    <h4 class="font-bold text-lg text-on-background">${item.titulo || item.modeloRover}</h4>
+                                </div>
+                                <p class="text-xs text-on-surface-variant mt-1">
+                                    Data Prevista: <strong class="text-on-surface">${item.dataVoo || item.dataPartida || 'A definir'}</strong>
+                                    ${item.adicionais ? ' • Adicionais: ' + item.adicionais.join(', ') : ''}
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-headline-md text-base text-primary">${item.preco || item.valorTotal}</div>
+                                <div class="text-[11px] text-on-surface-variant/70">Código: ${item.id.substring(0, 8)}</div>
+                            </div>
+                        </div>
+
+                        <!-- Barra de progresso/Timeline do andamento -->
+                        <div class="pt-3 border-t border-white/10">
+                            <div class="w-full bg-surface-container-low h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-primary to-secondary h-full transition-all duration-500" style="width: ${status === 'Voo Aprovado' ? '100%' : '50%'}"></div>
+                            </div>
+                            ${stepStatusHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } catch (err) {
+            console.error("Erro busca:", err);
+            listDiv.innerHTML = '<div class="text-center py-8 text-error font-interactive-ui">Erro ao buscar histórico de reservas.</div>';
+        }
+    };
+
+    window.quickSearchByEmail = function() {
+        const email = prompt("Informe seu e-mail de cadastro para consultar suas reservas:");
+        if (email) {
+            window.customSearchEmail = email;
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('explorer-portal').classList.remove('hidden');
+            document.getElementById('user-welcome-name').innerText = `Consulta Rápida de Reservas`;
+            document.getElementById('user-welcome-email').innerText = `E-mail pesquisado: ${email}`;
+            window.loadUserReservations();
+        }
+    };
+</script>
+
+<script>
+    function switchAuthTab(tab) {
+        if (tab === 'login') {
+            document.getElementById('form-login').classList.remove('hidden');
+            document.getElementById('form-register').classList.add('hidden');
+            document.getElementById('tab-btn-login').className = 'flex-1 pb-3 text-center font-interactive-ui text-sm font-bold text-primary border-b-2 border-primary transition-all';
+            document.getElementById('tab-btn-register').className = 'flex-1 pb-3 text-center font-interactive-ui text-sm text-on-surface-variant hover:text-on-surface transition-all';
+        } else {
+            document.getElementById('form-login').classList.add('hidden');
+            document.getElementById('form-register').classList.remove('hidden');
+            document.getElementById('tab-btn-register').className = 'flex-1 pb-3 text-center font-interactive-ui text-sm font-bold text-secondary border-b-2 border-secondary transition-all';
+            document.getElementById('tab-btn-login').className = 'flex-1 pb-3 text-center font-interactive-ui text-sm text-on-surface-variant hover:text-on-surface transition-all';
+        }
+    }
+</script>
+
+</body>
+</html>
